@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html>
+
+<!-- https://en.wikipedia.org/wiki/Yatzy -->
+
+<head>
+<title>Yatzy</title>
+<script>
+
+const die_faces = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+function roll_d6(count)
+{
+	if (count === undefined) { count = 1; }
+	var result = [];
+	for (var i = 0; i < count; i++) {
+		result.push(Math.floor(Math.random() * Math.floor(6)) + 1);
+	}
+	return result;
+}
+
+function roll_as_string(roll_arr)
+{
+	return roll_arr.map((roll) => { return die_faces[roll]; });
+}
+
+function on_click_roll()
+{
+	const dice_count = 5;
+	var roll = roll_d6(dice_count);
+
+	var dice_div = document.getElementById('dice');
+	dice_div.innerHTML = roll_as_string(roll);
+}
+
+</script>
+</head>
+
+<body>
+
+<div id="dice"></div>
+<button onclick="on_click_roll();">Roll</button>
+
+</body>
+
+</html>
