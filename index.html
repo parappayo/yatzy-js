@@ -28,6 +28,8 @@ input {
 <script>
 "use strict";
 
+var most_recent_roll = [];
+
 const scorecard_bonus_threshold = 63;
 const scorecard_bonus_amount = 50;
 
@@ -68,7 +70,34 @@ const scorecard_max_values = {
 	"yatzy_scorecard_full_house" : 30,
 	"yatzy_scorecard_chance" : 30,
 	"yatzy_scorecard_yatzy" : 50
+};
+
+function upper_scorecard_eval(die_value)
+{
+	return (roll) => {
+		return roll
+			.map((value) => { return value == die_value ? die_value : 0; })
+			.reduce((sum, value) => { return sum + value; });
+	}
 }
+
+const scorecard_evals = {
+	"yatzy_scorecard_ones" : upper_scorecard_eval(1),
+	"yatzy_scorecard_twos" : upper_scorecard_eval(2),
+	"yatzy_scorecard_threes" : upper_scorecard_eval(3),
+	"yatzy_scorecard_fours" : upper_scorecard_eval(4),
+	"yatzy_scorecard_fives" : upper_scorecard_eval(5),
+	"yatzy_scorecard_sixes" : upper_scorecard_eval(6),
+	"yatzy_scorecard_one_pair" : (roll) => { return 0; },
+	"yatzy_scorecard_two_pair" : (roll) => { return 0; },
+	"yatzy_scorecard_three_of_a_kind" : (roll) => { return 0; },
+	"yatzy_scorecard_four_of_a_kind" : (roll) => { return 0; },
+	"yatzy_scorecard_small_straight" : (roll) => { return 0; },
+	"yatzy_scorecard_large_straight" : (roll) => { return 0; },
+	"yatzy_scorecard_full_house" : (roll) => { return 0; },
+	"yatzy_scorecard_chance" : (roll) => { return 0; },
+	"yatzy_scorecard_yatzy" : (roll) => { return 0; }
+};
 
 function roll_d6(count)
 {
@@ -137,13 +166,20 @@ function update_scorecard_totals()
 function on_click_roll()
 {
 	const dice_count = 5;
-	var roll = roll_d6(dice_count);
+	most_recent_roll = roll_d6(dice_count);
 
 	var dice_div = document.getElementById('dice');
-	dice_div.innerHTML = roll_to_string(roll);
+	dice_div.innerHTML = roll_to_string(most_recent_roll);
 }
 
-function on_scorecard_change()
+function on_click_scorecard_input(element_id)
+{
+	var element = document.getElementById(element_id);
+	var score = scorecard_evals[element_id](most_recent_roll);
+	element.value = score;
+}
+
+function on_change_scorecard()
 {
 	update_scorecard_totals();
 }
@@ -176,32 +212,50 @@ window.onload = function ()
 </tr>
 <tr>
 	<td><p>Ones</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_ones"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_ones"
+		onclick="on_click_scorecard_input('yatzy_scorecard_ones')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of all 1s</p>
 </tr>
 <tr>
 	<td><p>Twos</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_twos"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_twos"
+		onclick="on_click_scorecard_input('yatzy_scorecard_twos')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of all 2s</p>
 </tr>
 <tr>
 	<td><p>Threes</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_threes"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_threes"
+		onclick="on_click_scorecard_input('yatzy_scorecard_threes')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of all 3s</p>
 </tr>
 <tr>
 	<td><p>Fours</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_fours"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_fours"
+		onclick="on_click_scorecard_input('yatzy_scorecard_fours')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of all 4s</p>
 </tr>
 <tr>
 	<td><p>Fives</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_fives"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_fives"
+		onclick="on_click_scorecard_input('yatzy_scorecard_fives')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of all 5s</p>
 </tr>
 <tr>
 	<td><p>Sixes</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_sixes"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_sixes"
+		onclick="on_click_scorecard_input('yatzy_scorecard_sixes')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of all 6s</p>
 </tr>
 <tr>
@@ -209,47 +263,74 @@ window.onload = function ()
 </tr>
 <tr>
 	<td><p>One Pair</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_one_pair"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_one_pair"
+		onclick="on_click_scorecard_input('yatzy_scorecard_one_pair')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of the pair</td>
 </tr>
 <tr>
 	<td><p>Two Pair</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_two_pair"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_two_pair"
+		onclick="on_click_scorecard_input('yatzy_scorecard_two_pair')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of the pairs</td>
 </tr>
 <tr>
 	<td><p>Three of a Kind</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_three_of_a_kind"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_three_of_a_kind"
+		onclick="on_click_scorecard_input('yatzy_scorecard_three_of_a_kind')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of the three dice</td>
 </tr>
 <tr>
 	<td><p>Four of a Kind</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_four_of_a_kind"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_four_of_a_kind"
+		onclick="on_click_scorecard_input('yatzy_scorecard_four_of_a_kind')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of the four dice</td>
 </tr>
 <tr>
 	<td><p>Small Straight</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_small_straight"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_small_straight"
+		onclick="on_click_scorecard_input('yatzy_scorecard_small_straight')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">30 points</td>
 </tr>
 <tr>
 	<td><p>Large Straight</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_large_straight"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_large_straight"
+		onclick="on_click_scorecard_input('yatzy_scorecard_large_straight')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">30 points</td>
 </tr>
 <tr>
 	<td><p>Full House</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_full_house"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_full_house"
+		onclick="on_click_scorecard_input('yatzy_scorecard_full_house')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of all dice</p></td>
 </tr>
 <tr>
 	<td><p>Chance</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_chance"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_chance"
+		onclick="on_click_scorecard_input('yatzy_scorecard_chance')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">Sum of all dice</p></td>
 </tr>
 <tr>
 	<td><p>Yatzy</p></td>
-	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_yatzy"></td>
+	<td><input type="text"
+		id="yatzy_scorecard_yatzy"
+		onclick="on_click_scorecard_input('yatzy_scorecard_yatzy')"
+		onchange="on_change_scorecard()"></td>
 	<td><p class="score_help">50 points</p></td>
 </tr>
 <tr>
@@ -257,19 +338,27 @@ window.onload = function ()
 </tr>
 <tr>
 	<td><p>Upper Sum</p></td>
-	<td><input type="text" id="yatzy_scorecard_upper_sum" readonly></td>
+	<td><input type="text"
+		id="yatzy_scorecard_upper_sum"
+		readonly></td>
 </tr>
 <tr>
 	<td><p>Bonus</p></td>
-	<td><input type="text" id="yatzy_scorecard_bonus" readonly></td>
+	<td><input type="text"
+		id="yatzy_scorecard_bonus"
+		readonly></td>
 </tr>
 <tr>
 	<td><p>Lower Sum</p></td>
-	<td><input type="text" id="yatzy_scorecard_lower_sum" readonly></td>
+	<td><input type="text"
+		id="yatzy_scorecard_lower_sum"
+		readonly></td>
 </tr>
 <tr>
 	<td><p>Total</p></td>
-	<td><input type="text" id="yatzy_scorecard_total" readonly></td>
+	<td><input type="text"
+		id="yatzy_scorecard_total"
+		readonly></td>
 </tr>
 </table>
 
