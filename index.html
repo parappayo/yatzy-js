@@ -20,7 +20,7 @@ function roll_d6(count)
 	return result;
 }
 
-function roll_as_string(roll_arr)
+function roll_to_string(roll_arr)
 {
 	return roll_arr.map((roll) => { return die_faces[roll]; });
 }
@@ -31,7 +31,12 @@ function on_click_roll()
 	var roll = roll_d6(dice_count);
 
 	var dice_div = document.getElementById('dice');
-	dice_div.innerHTML = roll_as_string(roll);
+	dice_div.innerHTML = roll_to_string(roll);
+}
+
+window.onload = function ()
+{
+	on_click_roll();
 }
 
 </script>
