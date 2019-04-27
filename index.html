@@ -2,8 +2,6 @@
 <meta charset="utf-8"/>
 <html>
 
-<!-- https://en.wikipedia.org/wiki/Yatzy -->
-
 <head>
 <title>Yatzy</title>
 <style>
@@ -12,6 +10,9 @@ body {
 	padding: 2rem;
 	margin: auto;
 	font-family: "Helvetica", "Arial", sans-serif;
+}
+#dice {
+	font-size: x-large;
 }
 </style>
 <script>
@@ -30,7 +31,9 @@ function roll_d6(count)
 
 function roll_to_string(roll_arr)
 {
-	return roll_arr.map((roll) => { return die_faces[roll]; });
+	return roll_arr
+		.map((roll) => { return die_faces[roll]; })
+		.join(' ');
 }
 
 function on_click_roll()
@@ -51,6 +54,10 @@ window.onload = function ()
 </head>
 
 <body>
+
+<h1>Yatzy</h1>
+
+<p><a href="https://en.wikipedia.org/wiki/Yatzy">Rules</a></p>
 
 <h2>Dice</h2>
 
