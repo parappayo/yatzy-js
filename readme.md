@@ -4,7 +4,7 @@ Hobby project implementation of [Yatzy](https://en.wikipedia.org/wiki/Yatzy) in 
 
 # Remarks
 
-* Using `<table>` for layout is gore, but also ¯\_(ツ)_/¯
+* Using `<table>` for layout is gore, but also ¯\\_(ツ)_/¯
 
 # References
 
