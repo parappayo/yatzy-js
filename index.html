@@ -5,14 +5,24 @@
 <head>
 <title>Yatzy</title>
 <style>
+
 body {
 	max-width: 38rem;
 	padding: 2rem;
 	margin: auto;
 	font-family: "Helvetica", "Arial", sans-serif;
 }
+
+input {
+	width: 3em;
+}
+
 #dice {
 	font-size: x-large;
+}
+
+.score_help {
+	font-size: small;
 }
 </style>
 <script>
@@ -162,88 +172,88 @@ window.onload = function ()
 
 <table>
 <tr>
-	<td><h3>Upper Section</h3></td>
+	<td><strong>Upper Section</strong></td>
 </tr>
 <tr>
 	<td><p>Ones</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_ones"></td>
-	<td><p>Sum of all 1s</p>
+	<td><p class="score_help">Sum of all 1s</p>
 </tr>
 <tr>
 	<td><p>Twos</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_twos"></td>
-	<td><p>Sum of all 2s</p>
+	<td><p class="score_help">Sum of all 2s</p>
 </tr>
 <tr>
 	<td><p>Threes</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_threes"></td>
-	<td><p>Sum of all 3s</p>
+	<td><p class="score_help">Sum of all 3s</p>
 </tr>
 <tr>
 	<td><p>Fours</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_fours"></td>
-	<td><p>Sum of all 4s</p>
+	<td><p class="score_help">Sum of all 4s</p>
 </tr>
 <tr>
 	<td><p>Fives</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_fives"></td>
-	<td><p>Sum of all 5s</p>
+	<td><p class="score_help">Sum of all 5s</p>
 </tr>
 <tr>
 	<td><p>Sixes</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_sixes"></td>
-	<td><p>Sum of all 6s</p>
+	<td><p class="score_help">Sum of all 6s</p>
 </tr>
 <tr>
-	<td><h3>Lower Section</h3></td>
+	<td><strong>Lower Section</strong></td>
 </tr>
 <tr>
 	<td><p>One Pair</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_one_pair"></td>
-	<td><p>Sum of the pair</td>
+	<td><p class="score_help">Sum of the pair</td>
 </tr>
 <tr>
 	<td><p>Two Pair</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_two_pair"></td>
-	<td><p>Sum of the pairs</td>
+	<td><p class="score_help">Sum of the pairs</td>
 </tr>
 <tr>
 	<td><p>Three of a Kind</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_three_of_a_kind"></td>
-	<td><p>Sum of the three dice</td>
+	<td><p class="score_help">Sum of the three dice</td>
 </tr>
 <tr>
 	<td><p>Four of a Kind</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_four_of_a_kind"></td>
-	<td><p>Sum of the four dice</td>
+	<td><p class="score_help">Sum of the four dice</td>
 </tr>
 <tr>
 	<td><p>Small Straight</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_small_straight"></td>
-	<td><p>30 points</td>
+	<td><p class="score_help">30 points</td>
 </tr>
 <tr>
 	<td><p>Large Straight</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_large_straight"></td>
-	<td><p>30 points</td>
+	<td><p class="score_help">30 points</td>
 </tr>
 <tr>
 	<td><p>Full House</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_full_house"></td>
-	<td><p>Sum of all dice</p></td>
+	<td><p class="score_help">Sum of all dice</p></td>
 </tr>
 <tr>
 	<td><p>Chance</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_chance"></td>
-	<td><p>Sum of all dice</p></td>
+	<td><p class="score_help">Sum of all dice</p></td>
 </tr>
 <tr>
 	<td><p>Yatzy</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_yatzy"></td>
-	<td><p>50 points</p></td>
+	<td><p class="score_help">50 points</p></td>
 </tr>
 <tr>
-	<td><h3>Total</h3></td>
+	<td><strong>Total</strong></td>
 </tr>
 <tr>
 	<td><p>Upper Sum</p></td>
