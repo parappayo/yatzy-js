@@ -17,7 +17,29 @@ body {
 </style>
 <script>
 
+const scorecard_bonus_threshold = 63;
+const scorecard_bonus_amount = 50;
+
 const die_faces = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+const scorecard_upper_section_ids = [
+	"yatzy_scorecard_ones",
+	"yatzy_scorecard_twos",
+	"yatzy_scorecard_threes",
+	"yatzy_scorecard_fours",
+	"yatzy_scorecard_fives",
+	"yatzy_scorecard_sixes" ];
+
+const scorecard_lower_section_ids = [
+	"yatzy_scorecard_one_pair",
+	"yatzy_scorecard_two_pair",
+	"yatzy_scorecard_three_of_a_kind",
+	"yatzy_scorecard_four_of_a_kind",
+	"yatzy_scorecard_small_straight",
+	"yatzy_scorecard_large_straight",
+	"yatzy_scorecard_full_house",
+	"yatzy_scorecard_chance",
+	"yatzy_scorecard_yatzy" ];
 
 function roll_d6(count)
 {
@@ -36,6 +58,17 @@ function roll_to_string(roll_arr)
 		.join(' ');
 }
 
+function sum_element_int_values(element_id_arr)
+{
+	return element_id_arr
+		.map((element_id) => {
+			var element = document.getElementById(element_id);
+			var result = element ? parseInt(element.value) : 0;
+			return isNaN(result) ? 0 : result;
+		})
+		.reduce((sum, value) => { return sum + value; });
+}
+
 function on_click_roll()
 {
 	const dice_count = 5;
@@ -43,6 +76,24 @@ function on_click_roll()
 
 	var dice_div = document.getElementById('dice');
 	dice_div.innerHTML = roll_to_string(roll);
+}
+
+function on_scorecard_change()
+{
+	var upper_sum_input = document.getElementById('yatzy_scorecard_upper_sum');
+	upper_sum_input.value = sum_element_int_values(scorecard_upper_section_ids);
+
+	var lower_sum_input = document.getElementById('yatzy_scorecard_lower_sum');
+	lower_sum_input.value = sum_element_int_values(scorecard_lower_section_ids);
+
+	var bonus_input = document.getElementById('yatzy_scorecard_bonus');
+	bonus_input.value = upper_sum_input.value >= scorecard_bonus_threshold ? scorecard_bonus_amount : 0;
+
+	var total_input = document.getElementById('yatzy_scorecard_total');
+	total_input.value =
+		parseInt(upper_sum_input.value) +
+		parseInt(lower_sum_input.value) +
+		parseInt(bonus_input.value);
 }
 
 window.onload = function ()
@@ -72,85 +123,85 @@ window.onload = function ()
 </tr>
 <tr>
 	<td><p>Ones</p></td>
-	<td><input type="text" name="yatzy_scorecard_ones"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_ones"></td>
 </tr>
 <tr>
 	<td><p>Twos</p></td>
-	<td><input type="text" name="yatzy_scorecard_twos"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_twos"></td>
 </tr>
 <tr>
 	<td><p>Threes</p></td>
-	<td><input type="text" name="yatzy_scorecard_threes"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_threes"></td>
 </tr>
 <tr>
 	<td><p>Fours</p></td>
-	<td><input type="text" name="yatzy_scorecard_fours"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_fours"></td>
 </tr>
 <tr>
 	<td><p>Fives</p></td>
-	<td><input type="text" name="yatzy_scorecard_fives"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_fives"></td>
 </tr>
 <tr>
 	<td><p>Sixes</p></td>
-	<td><input type="text" name="yatzy_scorecard_sixes"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_sixes"></td>
 </tr>
 <tr>
 	<td><h3>Lower Section</h3></td>
 </tr>
 <tr>
 	<td><p>One Pair</p></td>
-	<td><input type="text" name="yatzy_scorecard_one_pair"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_one_pair"></td>
 </tr>
 <tr>
 	<td><p>Two Pair</p></td>
-	<td><input type="text" name="yatzy_scorecard_two_pair"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_two_pair"></td>
 </tr>
 <tr>
 	<td><p>Three of a Kind</p></td>
-	<td><input type="text" name="yatzy_scorecard_three_of_a_kind"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_three_of_a_kind"></td>
 </tr>
 <tr>
 	<td><p>Four of a Kind</p></td>
-	<td><input type="text" name="yatzy_scorecard_four_of_a_kind"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_four_of_a_kind"></td>
 </tr>
 <tr>
 	<td><p>Small Straight</p></td>
-	<td><input type="text" name="yatzy_scorecard_small_straight"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_small_straight"></td>
 </tr>
 <tr>
 	<td><p>Large Straight</p></td>
-	<td><input type="text" name="yatzy_scorecard_large_straight"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_large_straight"></td>
 </tr>
 <tr>
 	<td><p>Full House</p></td>
-	<td><input type="text" name="yatzy_scorecard_full_house"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_full_house"></td>
 </tr>
 <tr>
 	<td><p>Chance</p></td>
-	<td><input type="text" name="yatzy_scorecard_chance"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_chance"></td>
 </tr>
 <tr>
 	<td><p>Yatzy</p></td>
-	<td><input type="text" name="yatzy_scorecard_yatzy"></td>
+	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_yatzy"></td>
 </tr>
 <tr>
 	<td><h3>Total</h3></td>
 </tr>
 <tr>
 	<td><p>Upper Sum</p></td>
-	<td><input type="text" name="yatzy_scorecard_upper_sum"></td>
+	<td><input type="text" id="yatzy_scorecard_upper_sum" readonly></td>
 </tr>
 <tr>
 	<td><p>Bonus</p></td>
-	<td><input type="text" name="yatzy_scorecard_bonus"></td>
+	<td><input type="text" id="yatzy_scorecard_bonus" readonly></td>
 </tr>
 <tr>
 	<td><p>Lower Sum</p></td>
-	<td><input type="text" name="yatzy_scorecard_lower_sum"></td>
+	<td><input type="text" id="yatzy_scorecard_lower_sum" readonly></td>
 </tr>
 <tr>
 	<td><p>Total</p></td>
-	<td><input type="text" name="yatzy_scorecard_total"></td>
+	<td><input type="text" id="yatzy_scorecard_total" readonly></td>
 </tr>
 </table>
 
