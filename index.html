@@ -16,6 +16,7 @@ body {
 }
 </style>
 <script>
+"use strict";
 
 const scorecard_bonus_threshold = 63;
 const scorecard_bonus_amount = 50;
@@ -41,6 +42,24 @@ const scorecard_lower_section_ids = [
 	"yatzy_scorecard_chance",
 	"yatzy_scorecard_yatzy" ];
 
+const scorecard_max_values = {
+	"yatzy_scorecard_ones" : 5,
+	"yatzy_scorecard_twos" : 10,
+	"yatzy_scorecard_threes" : 15,
+	"yatzy_scorecard_fours" : 20,
+	"yatzy_scorecard_fives" : 25,
+	"yatzy_scorecard_sixes" : 30,
+	"yatzy_scorecard_one_pair" : 12,
+	"yatzy_scorecard_two_pair" : 24,
+	"yatzy_scorecard_three_of_a_kind" : 18,
+	"yatzy_scorecard_four_of_a_kind" : 32,
+	"yatzy_scorecard_small_straight" : 30,
+	"yatzy_scorecard_large_straight" : 30,
+	"yatzy_scorecard_full_house" : 30,
+	"yatzy_scorecard_chance" : 30,
+	"yatzy_scorecard_yatzy" : 50
+}
+
 function roll_d6(count)
 {
 	if (count === undefined) { count = 1; }
@@ -58,6 +77,22 @@ function roll_to_string(roll_arr)
 		.join(' ');
 }
 
+function validate_scorecard_element(element_id)
+{
+	var element = document.getElementById(element_id);
+	var elementMax = scorecard_max_values[element_id];
+	var value = parseInt(element.value);
+	value = isNaN(value) ? 0 : value;
+	value = Math.max(0, Math.min(elementMax, value));
+	element.value = value;
+}
+
+function validate_scorecard()
+{
+	scorecard_upper_section_ids.forEach((element_id) => { validate_scorecard_element(element_id); });
+	scorecard_lower_section_ids.forEach((element_id) => { validate_scorecard_element(element_id); });
+}
+
 function sum_element_int_values(element_id_arr)
 {
 	return element_id_arr
@@ -69,17 +104,10 @@ function sum_element_int_values(element_id_arr)
 		.reduce((sum, value) => { return sum + value; });
 }
 
-function on_click_roll()
+function update_scorecard_totals()
 {
-	const dice_count = 5;
-	var roll = roll_d6(dice_count);
+	validate_scorecard();
 
-	var dice_div = document.getElementById('dice');
-	dice_div.innerHTML = roll_to_string(roll);
-}
-
-function on_scorecard_change()
-{
 	var upper_sum_input = document.getElementById('yatzy_scorecard_upper_sum');
 	upper_sum_input.value = sum_element_int_values(scorecard_upper_section_ids);
 
@@ -96,8 +124,23 @@ function on_scorecard_change()
 		parseInt(bonus_input.value);
 }
 
+function on_click_roll()
+{
+	const dice_count = 5;
+	var roll = roll_d6(dice_count);
+
+	var dice_div = document.getElementById('dice');
+	dice_div.innerHTML = roll_to_string(roll);
+}
+
+function on_scorecard_change()
+{
+	update_scorecard_totals();
+}
+
 window.onload = function ()
 {
+	update_scorecard_totals();
 	on_click_roll();
 }
 
@@ -124,26 +167,32 @@ window.onload = function ()
 <tr>
 	<td><p>Ones</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_ones"></td>
+	<td><p>Sum of all 1s</p>
 </tr>
 <tr>
 	<td><p>Twos</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_twos"></td>
+	<td><p>Sum of all 2s</p>
 </tr>
 <tr>
 	<td><p>Threes</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_threes"></td>
+	<td><p>Sum of all 3s</p>
 </tr>
 <tr>
 	<td><p>Fours</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_fours"></td>
+	<td><p>Sum of all 4s</p>
 </tr>
 <tr>
 	<td><p>Fives</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_fives"></td>
+	<td><p>Sum of all 5s</p>
 </tr>
 <tr>
 	<td><p>Sixes</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_sixes"></td>
+	<td><p>Sum of all 6s</p>
 </tr>
 <tr>
 	<td><h3>Lower Section</h3></td>
@@ -151,38 +200,47 @@ window.onload = function ()
 <tr>
 	<td><p>One Pair</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_one_pair"></td>
+	<td><p>Sum of the pair</td>
 </tr>
 <tr>
 	<td><p>Two Pair</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_two_pair"></td>
+	<td><p>Sum of the pairs</td>
 </tr>
 <tr>
 	<td><p>Three of a Kind</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_three_of_a_kind"></td>
+	<td><p>Sum of the three dice</td>
 </tr>
 <tr>
 	<td><p>Four of a Kind</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_four_of_a_kind"></td>
+	<td><p>Sum of the four dice</td>
 </tr>
 <tr>
 	<td><p>Small Straight</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_small_straight"></td>
+	<td><p>30 points</td>
 </tr>
 <tr>
 	<td><p>Large Straight</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_large_straight"></td>
+	<td><p>30 points</td>
 </tr>
 <tr>
 	<td><p>Full House</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_full_house"></td>
+	<td><p>Sum of all dice</p></td>
 </tr>
 <tr>
 	<td><p>Chance</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_chance"></td>
+	<td><p>Sum of all dice</p></td>
 </tr>
 <tr>
 	<td><p>Yatzy</p></td>
 	<td><input type="text" onchange="on_scorecard_change()" id="yatzy_scorecard_yatzy"></td>
+	<td><p>50 points</p></td>
 </tr>
 <tr>
 	<td><h3>Total</h3></td>
