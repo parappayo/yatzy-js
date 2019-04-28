@@ -29,6 +29,7 @@ input {
 "use strict";
 
 var most_recent_roll = [];
+var is_die_held = {};
 
 const scorecard_bonus_threshold = 63;
 const scorecard_bonus_amount = 50;
@@ -165,21 +166,31 @@ function update_scorecard_totals()
 
 function update_die_elements(roll)
 {
-	most_recent_roll.forEach((die_value, index) => {
+	roll.forEach((die_value, index) => {
 		var die_element = document.getElementById('die' + (index + 1));
-		die_element.innerHTML = die_faces[die_value];
+		if (is_die_held[index + 1]) {
+			die_element.innerHTML = '<strong>' + die_faces[die_value]; + '</strong>';
+		} else {
+			die_element.innerHTML = die_faces[die_value];
+		}
 	});
 }
 
-function on_click_die(element_id)
+function on_click_die(die_index)
 {
-	console.log("clicked: " + element_id);
+	is_die_held[die_index] = !is_die_held[die_index];
+	update_die_elements(most_recent_roll);
 }
 
 function on_click_roll()
 {
 	const dice_count = 5;
-	most_recent_roll = roll_d6(dice_count);
+	var new_roll = roll_d6(dice_count);
+
+	most_recent_roll = new_roll.map((value, index) => {
+		return is_die_held[index + 1] ? most_recent_roll[index] : value;
+	});
+
 	update_die_elements(most_recent_roll);
 }
 
@@ -216,11 +227,11 @@ window.onload = function()
 
 <table>
 <tr>
-	<td><div id="die1" class="dice" onclick="on_click_die('die1')"></div></td>
-	<td><div id="die2" class="dice" onclick="on_click_die('die2')"></div></td>
-	<td><div id="die3" class="dice" onclick="on_click_die('die3')"></div></td>
-	<td><div id="die4" class="dice" onclick="on_click_die('die4')"></div></td>
-	<td><div id="die5" class="dice" onclick="on_click_die('die5')"></div></td>
+	<td><div id="die1" class="dice" onclick="on_click_die(1)"></div></td>
+	<td><div id="die2" class="dice" onclick="on_click_die(2)"></div></td>
+	<td><div id="die3" class="dice" onclick="on_click_die(3)"></div></td>
+	<td><div id="die4" class="dice" onclick="on_click_die(4)"></div></td>
+	<td><div id="die5" class="dice" onclick="on_click_die(5)"></div></td>
 </tr>
 </table>
 
