@@ -64,7 +64,7 @@ function on_click_roll()
 function on_click_scorecard_input(element_id)
 {
 	var element = document.getElementById(element_id);
-	var score = scorecard.section_evals[element_id](dice.last_roll);
+	var score = scorecard.section_evals[element_id](dice);
 	element.value = score;
 }
 

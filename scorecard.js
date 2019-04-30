@@ -4,8 +4,8 @@ function createScorecard()
 {
 	function upper_scorecard_eval(die_value)
 	{
-		return (roll) => {
-			return roll
+		return (dice) => {
+			return dice.last_roll
 				.map((value) => { return value == die_value ? die_value : 0; })
 				.reduce((sum, value) => { return sum + value; });
 		}
@@ -13,10 +13,18 @@ function createScorecard()
 
 	function sum_all_dice_eval()
 	{
-		return (roll) => {
-			return roll
+		return (dice) => {
+			return dice.last_roll
 				.map((value) => { return value; })
 				.reduce((sum, value) => { return sum + value; });
+		}
+	}
+
+	function full_house_eval()
+	{
+		return (dice) => {
+			var full_house = dice.full_house();
+			return parseInt(full_house[0]) * 2 + parseInt(full_house[1]) * 3;
 		}
 	}
 
@@ -87,7 +95,7 @@ function createScorecard()
 			"yatzy_scorecard_four_of_a_kind" : (roll) => { return 0; },
 			"yatzy_scorecard_small_straight" : (roll) => { return 0; },
 			"yatzy_scorecard_large_straight" : (roll) => { return 0; },
-			"yatzy_scorecard_full_house" : sum_all_dice_eval(),
+			"yatzy_scorecard_full_house" : full_house_eval(),
 			"yatzy_scorecard_chance" : sum_all_dice_eval(),
 			"yatzy_scorecard_yatzy" : (roll) => { return 0; }
 		},
