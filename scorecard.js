@@ -11,6 +11,17 @@ function createScorecard()
 		}
 	}
 
+	function sum_element_int_values(element_id_arr)
+	{
+		return element_id_arr
+			.map((element_id) => {
+				var element = document.getElementById(element_id);
+				var result = element ? parseInt(element.value) : 0;
+				return isNaN(result) ? 0 : result;
+			})
+			.reduce((sum, value) => { return sum + value; });
+	}
+
 	return {
 		bonus_threshold: 63,
 		bonus_amount: 50,
@@ -70,6 +81,43 @@ function createScorecard()
 			"yatzy_scorecard_full_house" : (roll) => { return 0; },
 			"yatzy_scorecard_chance" : (roll) => { return 0; },
 			"yatzy_scorecard_yatzy" : (roll) => { return 0; }
+		},
+
+		validate_element: function (element_id)
+		{
+			var element = document.getElementById(element_id);
+			var elementMax = this.section_score_max[element_id];
+			var value = parseInt(element.value);
+
+			value = isNaN(value) ? 0 : value;
+			value = Math.max(0, Math.min(elementMax, value));
+			element.value = value;
+		},
+
+		validate: function ()
+		{
+			this.upper_section_ids.forEach((element_id) => { this.validate_element(element_id); });
+			this.lower_section_ids.forEach((element_id) => { this.validate_element(element_id); });
+		},
+
+		update_totals: function ()
+		{
+			this.validate();
+
+			var upper_sum_input = document.getElementById('yatzy_scorecard_upper_sum');
+			upper_sum_input.value = sum_element_int_values(this.upper_section_ids);
+
+			var lower_sum_input = document.getElementById('yatzy_scorecard_lower_sum');
+			lower_sum_input.value = sum_element_int_values(this.lower_section_ids);
+
+			var bonus_input = document.getElementById('yatzy_scorecard_bonus');
+			bonus_input.value = upper_sum_input.value >= this.bonus_threshold ? this.bonus_amount : 0;
+
+			var total_input = document.getElementById('yatzy_scorecard_total');
+			total_input.value =
+				parseInt(upper_sum_input.value) +
+				parseInt(lower_sum_input.value) +
+				parseInt(bonus_input.value);
 		},
 	};
 }

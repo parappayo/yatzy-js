@@ -36,53 +36,6 @@ input {
 var dice = createDice();
 var scorecard = createScorecard();
 
-function validate_scorecard_element(element_id)
-{
-	var element = document.getElementById(element_id);
-	var elementMax = scorecard.section_score_max[element_id];
-	var value = parseInt(element.value);
-	value = isNaN(value) ? 0 : value;
-	value = Math.max(0, Math.min(elementMax, value));
-	element.value = value;
-}
-
-function validate_scorecard()
-{
-	scorecard.upper_section_ids.forEach((element_id) => { validate_scorecard_element(element_id); });
-	scorecard.lower_section_ids.forEach((element_id) => { validate_scorecard_element(element_id); });
-}
-
-function sum_element_int_values(element_id_arr)
-{
-	return element_id_arr
-		.map((element_id) => {
-			var element = document.getElementById(element_id);
-			var result = element ? parseInt(element.value) : 0;
-			return isNaN(result) ? 0 : result;
-		})
-		.reduce((sum, value) => { return sum + value; });
-}
-
-function update_scorecard_totals()
-{
-	validate_scorecard();
-
-	var upper_sum_input = document.getElementById('yatzy_scorecard_upper_sum');
-	upper_sum_input.value = sum_element_int_values(scorecard.upper_section_ids);
-
-	var lower_sum_input = document.getElementById('yatzy_scorecard_lower_sum');
-	lower_sum_input.value = sum_element_int_values(scorecard.lower_section_ids);
-
-	var bonus_input = document.getElementById('yatzy_scorecard_bonus');
-	bonus_input.value = upper_sum_input.value >= scorecard.bonus_threshold ? scorecard.bonus_amount : 0;
-
-	var total_input = document.getElementById('yatzy_scorecard_total');
-	total_input.value =
-		parseInt(upper_sum_input.value) +
-		parseInt(lower_sum_input.value) +
-		parseInt(bonus_input.value);
-}
-
 function update_die_elements(roll)
 {
 	roll.forEach((die_value, index) => {
@@ -117,12 +70,12 @@ function on_click_scorecard_input(element_id)
 
 function on_change_scorecard()
 {
-	update_scorecard_totals();
+	scorecard.update_totals();
 }
 
 window.onload = function()
 {
-	update_scorecard_totals();
+	scorecard.update_totals();
 	on_click_roll();
 }
 
