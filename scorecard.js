@@ -11,6 +11,15 @@ function createScorecard()
 		}
 	}
 
+	function sum_all_dice_eval()
+	{
+		return (roll) => {
+			return roll
+				.map((value) => { return value; })
+				.reduce((sum, value) => { return sum + value; });
+		}
+	}
+
 	function sum_element_int_values(element_id_arr)
 	{
 		return element_id_arr
@@ -78,8 +87,8 @@ function createScorecard()
 			"yatzy_scorecard_four_of_a_kind" : (roll) => { return 0; },
 			"yatzy_scorecard_small_straight" : (roll) => { return 0; },
 			"yatzy_scorecard_large_straight" : (roll) => { return 0; },
-			"yatzy_scorecard_full_house" : (roll) => { return 0; },
-			"yatzy_scorecard_chance" : (roll) => { return 0; },
+			"yatzy_scorecard_full_house" : sum_all_dice_eval(),
+			"yatzy_scorecard_chance" : sum_all_dice_eval(),
 			"yatzy_scorecard_yatzy" : (roll) => { return 0; }
 		},
 
