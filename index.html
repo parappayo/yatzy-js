@@ -172,10 +172,9 @@ function on_click_die(die_index)
 function on_click_roll()
 {
 	const dice_count = 5;
-	var new_roll = dice.roll_d6(dice_count);
-	console.log(dice.to_string(new_roll));
+	dice.roll_d6(dice_count);
 
-	most_recent_roll = new_roll.map((value, index) => {
+	most_recent_roll = dice.last_roll.map((value, index) => {
 		return is_die_held[index + 1] ? most_recent_roll[index] : value;
 	});
 
