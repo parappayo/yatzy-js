@@ -25,16 +25,20 @@ input {
 	font-size: small;
 }
 </style>
+</head>
+
+<body>
+<script src="dice.js"></script>
 <script>
 "use strict";
+
+var dice = createDice();
 
 var most_recent_roll = [];
 var is_die_held = {};
 
 const scorecard_bonus_threshold = 63;
 const scorecard_bonus_amount = 50;
-
-const die_faces = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
 const scorecard_upper_section_ids = [
 	"yatzy_scorecard_ones",
@@ -100,23 +104,6 @@ const scorecard_evals = {
 	"yatzy_scorecard_yatzy" : (roll) => { return 0; }
 };
 
-function roll_d6(count)
-{
-	if (count === undefined) { count = 1; }
-	var result = [];
-	for (var i = 0; i < count; i++) {
-		result.push(Math.floor(Math.random() * Math.floor(6)) + 1);
-	}
-	return result;
-}
-
-function roll_to_string(roll_arr)
-{
-	return roll_arr
-		.map((roll) => { return die_faces[roll]; })
-		.join(' ');
-}
-
 function validate_scorecard_element(element_id)
 {
 	var element = document.getElementById(element_id);
@@ -169,9 +156,9 @@ function update_die_elements(roll)
 	roll.forEach((die_value, index) => {
 		var die_element = document.getElementById('die' + (index + 1));
 		if (is_die_held[index + 1]) {
-			die_element.innerHTML = '<strong>' + die_faces[die_value]; + '</strong>';
+			die_element.innerHTML = '<strong>' + dice.faces[die_value]; + '</strong>';
 		} else {
-			die_element.innerHTML = die_faces[die_value];
+			die_element.innerHTML = dice.faces[die_value];
 		}
 	});
 }
@@ -185,7 +172,8 @@ function on_click_die(die_index)
 function on_click_roll()
 {
 	const dice_count = 5;
-	var new_roll = roll_d6(dice_count);
+	var new_roll = dice.roll_d6(dice_count);
+	console.log(dice.to_string(new_roll));
 
 	most_recent_roll = new_roll.map((value, index) => {
 		return is_die_held[index + 1] ? most_recent_roll[index] : value;
@@ -213,9 +201,6 @@ window.onload = function()
 }
 
 </script>
-</head>
-
-<body>
 
 <h1>Yatzy</h1>
 
