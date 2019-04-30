@@ -43,5 +43,5 @@ function createDice()
 				.map((roll) => { return this.faces[roll]; })
 				.join(' ');
 		},
-	}
+	};
 }
